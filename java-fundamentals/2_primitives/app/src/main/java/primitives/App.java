@@ -12,6 +12,8 @@ public class App {
         char c = 97;
 
         Print(c);
+
+        Exercises.main(new String[]{"hello"});
     }
 
     public static void Print(Object message) {
