@@ -56,6 +56,17 @@ public class App {
                 System.out.println("Your favourite letter is not a!");
         }
 
+        System.out.println("Now trying with switch expression");
+
+        String message = switch(myChar) {
+            case 'a' -> "Your favourite letter is a!";
+                default -> {
+                    yield "Your favourite letter is not a!";
+                }
+        };
+
+        System.out.println(message);
+
 
         sc.close();
     }
