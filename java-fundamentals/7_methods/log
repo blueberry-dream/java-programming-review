@@ -1,0 +1,11 @@
+> Task :app:compileJava UP-TO-DATE
+> Task :app:processResources NO-SOURCE
+> Task :app:classes UP-TO-DATE
+
+> Task :app:run FAILED
+HELLO WORLD!
+Give me a number from 1 - 10!
+2 actionable tasks: 1 executed, 1 up-to-date
+
+> Task :app:compileJava FAILED
+1 actionable task: 1 executed
