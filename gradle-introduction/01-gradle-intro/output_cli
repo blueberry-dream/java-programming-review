@@ -1,0 +1,22 @@
+gradle help
+
+> Task :help
+
+Welcome to Gradle 8.5.
+
+Directory '/home/skhan/src/java-programming-review/gradle-introduction/01-gradle-intro' does not contain a Gradle build.
+
+To create a new build in this directory, run gradle init
+
+For more detail on the 'init' task, see https://docs.gradle.org/8.5/userguide/build_init_plugin.html
+
+For more detail on creating a Gradle build, see https://docs.gradle.org/8.5/userguide/tutorial_using_tasks.html
+
+To see a list of command-line options, run gradle --help
+
+For more detail on using Gradle, see https://docs.gradle.org/8.5/userguide/command_line_interface.html
+
+For troubleshooting, visit https://help.gradle.org
+
+BUILD SUCCESSFUL in 402ms
+1 actionable task: 1 executed
