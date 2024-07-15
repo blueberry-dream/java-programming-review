@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.0"
+    application
 }
 
 group = "dev.blueberry.dream"
@@ -16,6 +17,9 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+
+
 
 kotlin {
     jvmToolchain(21)
