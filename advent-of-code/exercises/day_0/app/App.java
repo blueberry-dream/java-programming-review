@@ -3,9 +3,30 @@
  */
 package app;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class App {
+    public static final Path ansDir = Paths.get("")
+            .toAbsolutePath()
+            .resolve("exercises")
+            .resolve("day_0")
+            .resolve("ans");
+
     public static void main(String[] args) {
+        // init answers directory
+        try {
+            Files.createDirectories(App.ansDir);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+
+        // try (InputStream inStream = App.class.getResourceAsStream("/input")) {}
+        // catch (Exception e) {}
 
         System.out.println("Hello World!");
     }
