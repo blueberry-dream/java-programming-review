@@ -25,18 +25,12 @@ public class App {
                 if (currentChar == '\n') {
                     if(firstChar != -1 && lastChar != -1) {
                         sum += Integer.parseInt(String.valueOf((char)firstChar) + (char)lastChar);
-                        String numStr = String.valueOf((char)firstChar) + (char)lastChar;
-
-                        System.out.println("EOL:\t" + numStr);
 
                         firstChar = -1;
                         lastChar = -1;
                         continue;
                     } else if (firstChar != -1 ) {
-                        String numStr = String.valueOf((char) firstChar) + (char) firstChar;
-                        sum += Integer.parseInt(numStr);
-
-                        System.out.println("EOL:\t" + numStr);
+                        sum += Integer.parseInt(String.valueOf((char) firstChar) + (char) firstChar);
 
                         firstChar = -1;
                         continue;
@@ -47,10 +41,8 @@ public class App {
 
                 if(firstChar == -1) {
                     firstChar = currentChar;
-                    System.out.println("First Num:\t" + (char) firstChar);
                 } else {
                     lastChar = currentChar;
-                    System.out.println("First Num:\t" + (char) firstChar + "\tLast Num:\t" + (char) lastChar);
                 }
             }
         } 
@@ -60,6 +52,5 @@ public class App {
         }
 
         System.out.println(sum);
-
     }
 }
