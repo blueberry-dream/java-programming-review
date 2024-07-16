@@ -83,5 +83,69 @@ public class App {
         }
     }
 
-    static void Part2() {}
+    static void Part2() {
+        int[][] num2CharArrays = {
+                "one".chars().toArray(),
+                "two".chars().toArray(),
+                "three".chars().toArray(),
+                "four".chars().toArray(),
+                "five".chars().toArray(),
+                "six".chars().toArray(),
+                "seven".chars().toArray(),
+                "eight".chars().toArray(),
+                "nine".chars().toArray(),
+        };
+
+        try (InputStream inStream = App.class.getResourceAsStream("/input")) {
+            int sum = 0;
+            int[] nextNum = new int [5];
+            int nextLetterIdx = 0;
+            Arrays.fill(nextNum, -1);
+
+            int current;
+            char currentChar;
+            int firstChar = -1;
+            int lastChar = -1;
+
+            if (inStream == null) {
+                throw new Exception("File not found");
+            }
+
+            while ((current = inStream.read()) != -1) {
+                currentChar = (char) current;
+
+                if (currentChar == '\n') {
+                    if (firstChar != -1 && lastChar != -1) {
+                        sum += Integer.parseInt(String.valueOf((char) firstChar) + (char) lastChar);
+
+                        firstChar = -1;
+                        lastChar = -1;
+                        continue;
+                    } else if (firstChar != -1) {
+                        sum += Integer.parseInt(String.valueOf((char) firstChar) + (char) firstChar);
+
+                        firstChar = -1;
+                        continue;
+                    }
+                }
+
+                if (currentChar > 49 && currentChar < 57 && firstChar == -1) {
+                    firstChar = currentChar;
+                } else if (currentChar > 49 && currentChar < 57 && lastChar == -1){
+                    lastChar = currentChar;
+                }
+
+                // word check
+                if(nextLetterIdx == 5) {
+                    lastChar = Integer.parseInt(Arrays.toString(nextNum));
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+
+
+    }
 }
