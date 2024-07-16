@@ -10,9 +10,8 @@ val projectsList = listOf(
     "day_1"
 )
 
-val projectsList2 = 
-
 subProjectConfig(projectsList)
+
 fun subProjectConfig(projectsList: List<String>) {
     for(projectName in projectsList) {
         val projectID =":$projectName"
