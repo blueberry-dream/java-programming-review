@@ -15,6 +15,10 @@ public class App {
             int firstChar = -1;
             int lastChar = -1;
 
+            if(inStream == null) {
+                throw new Exception("File not found");
+            }
+
             while((current = inStream.read()) != -1) {
                 char currentChar = (char) current;
 
