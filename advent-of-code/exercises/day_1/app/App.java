@@ -8,9 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class App {
-    public static final Path ansDir = Paths.get("")
+    static final Path ansDir = Paths.get("")
             .toAbsolutePath()
             .resolve("exercises")
             .resolve("day_1")
@@ -25,13 +29,15 @@ public class App {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
 
-        App.Part1();
+        // App.Part1();
+        App.Part2();
     }
 
     static void Part1() {
         int sum = 0;
 
-        try (InputStream inStream = App.class.getResourceAsStream("/input")) {
+        // try (InputStream inStream = App.class.getResourceAsStream("/input")) {
+        try (InputStream inStream = App.class.getResourceAsStream("/input_mini")) {
             int current;
             int firstChar = -1;
             int lastChar = -1;
@@ -58,7 +64,8 @@ public class App {
                     }
                 }
 
-                if (currentChar < 49 || currentChar > 57) continue;
+                if (currentChar < 49 || currentChar > 57)
+                    continue;
 
                 if (firstChar == -1) {
                     firstChar = currentChar;
@@ -78,41 +85,119 @@ public class App {
 
             writer.write("Sum of all number is:\t" + sum);
             writer.close();
+
+            System.out.println("Part 1:\t the sum of all numbers is:\t" + sum);
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
     }
 
     static void Part2() {
-        int[][] num2CharArrays = {
-                "one".chars().toArray(),
-                "two".chars().toArray(),
-                "three".chars().toArray(),
-                "four".chars().toArray(),
-                "five".chars().toArray(),
-                "six".chars().toArray(),
-                "seven".chars().toArray(),
-                "eight".chars().toArray(),
-                "nine".chars().toArray(),
-        };
-
         try (InputStream inStream = App.class.getResourceAsStream("/input")) {
+            if (inStream == null) {
+                throw new Exception("File not found");
+            }
+
             int sum = 0;
-            int[] nextNum = new int [5];
-            int nextLetterIdx = 0;
-            Arrays.fill(nextNum, -1);
+            int[] partialNumArr = new int[5];
+            int nextPartialNumIdx = 0;
+            Arrays.fill(partialNumArr, -1);
 
             int current;
             char currentChar;
             int firstChar = -1;
             int lastChar = -1;
+            char[][] digitsCharArr = Arrays.stream(new String[] {
+                    "zero",
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "eight",
+                    "nine",
 
-            if (inStream == null) {
-                throw new Exception("File not found");
-            }
+            }).map(s -> s.toCharArray()).toArray(char[][]::new);
+
+            BiFunction<char[], Integer, Boolean> isValidNum = (chars, len) -> {
+                for (char[] num : digitsCharArr) {
+                    boolean isMatch = true;
+                    if (len > num.length) continue;
+
+                    int end = Math.min(len, num.length);
+                    for (int j = 0; j < end; j++) {
+                        if (num[j] != chars[j]) {
+                            isMatch = false;
+                        }
+                    }
+
+                    if (isMatch)
+                        return true;
+                }
+
+                return false;
+            };
+
+            Function<char[], Integer> getNum = (chars) -> {
+                for (int i = 0; i < digitsCharArr.length; i++) {
+                    if (Arrays.equals(digitsCharArr[i], chars)) {
+                        // System.out.println(
+                        //         String.format("\tcomparing to num:%s\tmatch:%b",
+                        //             new String(chars),
+                        //             Arrays.equals(digitsCharArr[i], chars)
+                        //             ));
+                        return i;
+                    }
+                }
+                return -1;
+            };
+
+            char[][] digitsCharArrTest = Arrays.stream(new String[] {
+                    "zero",
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "eight",
+                    "nine",
+                    "ont",
+                    "t",
+                    "si",
+                    "zer",
+                    "zerox",
+                    "th",
+                    "thi",
+                    "sev",
+                    "sevr"
+            }).map(s -> s.toCharArray()).toArray(char[][]::new);
+
+            // for (char[] num : digitsCharArrTest) {
+            //     Boolean isValid = isValidNum.apply(num, num.length);
+            //     int val = -1;
+            //
+            //     if (isValid) {
+            //         val = getNum.apply(num);
+            //     }
+            //
+            //     System.out.println(String.format(
+            //             "\tNum:\t%s\tisValid:\t%b\tval:\t%s",
+            //             String.valueOf(num),
+            //             isValid,
+            //             val));
+            // }
+            //
+            char[] currentWord = new char[5];
+            int currIdx = 0;
+            Arrays.fill(currentWord, '\u0000');
 
             while ((current = inStream.read()) != -1) {
                 currentChar = (char) current;
+                currentWord[currIdx++] = currentChar;
 
                 if (currentChar == '\n') {
                     if (firstChar != -1 && lastChar != -1) {
@@ -131,21 +216,52 @@ public class App {
 
                 if (currentChar > 49 && currentChar < 57 && firstChar == -1) {
                     firstChar = currentChar;
-                } else if (currentChar > 49 && currentChar < 57 && lastChar == -1){
+                } else if (currentChar > 49 && currentChar < 57 && lastChar == -1) {
                     lastChar = currentChar;
                 }
 
-                // word check
-                if(nextLetterIdx == 5) {
-                    lastChar = Integer.parseInt(Arrays.toString(nextNum));
+                // check if current word is valid
+                // WIP
+                boolean isValid = isValidNum.apply(currentWord, currIdx);
+
+                System.out.println(
+                        String.format("evaluating:\t%s\tisValid:\t%s",
+                        new String(currentWord),
+                        isValid
+
+                        ));
+
+                if (!isValid) {
+                    currIdx = 0;
+                    Arrays.fill(currentWord, '\u0000');
+                } else {
+                    currentWord[currIdx] = (char) current;
+                    int val = getNum.apply(currentWord);
+
+                    if (val == -1) {
+                        Arrays.fill(currentWord, '\u0000');
+                        currIdx = 0;
+                    } else {
+                        char valChar = Character.forDigit(val, 10);
+                        System.out.println(
+                                String.format("\tReading number:\t%s\tval:\t%s",
+                                    val,
+                                    valChar
+                                    ));
+
+                        if (firstChar == -1) {
+                            firstChar = valChar;
+                        } else {
+                            lastChar = valChar;
+                        }
+                    }
                 }
+
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
-
-
     }
 }
